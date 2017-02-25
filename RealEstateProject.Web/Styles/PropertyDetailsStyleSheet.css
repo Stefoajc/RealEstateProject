@@ -1,0 +1,60 @@
+﻿.details {
+    background-color:whitesmoke;
+    border: 2px solid;
+    border-radius: 5px ;
+    padding:5px;
+}
+
+.pagetop{
+    text-align:center;
+}
+
+.backtoall{
+    font-weight:bold;
+}
+
+.propertyFullDetail{
+    width:1000px;
+    align-self:stretch;
+}
+
+img {
+    display:block;
+    margin: auto;
+}
+
+.description{
+    border: 2px solid;
+    border-radius: 2px;
+    background-color: white;
+    margin-top:5px;
+}
+
+.spacing{
+    height:10;
+}
+
+.desccontainer{
+    margin-top: 100px;
+    margin-left:20px;
+    margin-right:20px;
+}
+
+.features{
+    margin-top:100px;
+}
+
+.featUnit{
+    padding-left:10px;
+    padding-bottom:20px;
+    text-decoration: underline;
+}
+
+.imagesList{
+    margin:auto;
+    
+}
+
+.imageoflist{
+    cursor:pointer;
+}

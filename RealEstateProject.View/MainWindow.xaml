@@ -1,0 +1,666 @@
+﻿<Window x:Class="RealEstateProject.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RealEstateProject.View"
+        xmlns:v="clr-namespace:RealEstateProject.View.Views"
+        xmlns:validations="clr-namespace:RealEstateProject.ViewModel;assembly=RealEstateProject.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="580" Width="860">
+    <Window.Resources>
+        <ControlTemplate x:Key="validationTemplate">
+            <DockPanel>
+                <TextBlock Foreground="Red" FontSize="20"></TextBlock>
+                <Border BorderBrush="Red" BorderThickness="2">
+                    <AdornedElementPlaceholder></AdornedElementPlaceholder>
+                </Border>
+            </DockPanel>
+        </ControlTemplate>
+
+        <validations:InverseAndBooleansToBooleanConverter x:Key="Converter"/>
+
+
+        <Style x:Key="textBoxInError" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                        Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="DisablerButton">
+            <Style.Triggers>
+                <Trigger Property="Command" Value="{x:Null}">
+                    <Setter Property="IsEnabled" Value="False" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+    </Window.Resources>
+    <Grid DataContext="{StaticResource PropertyViewModel}">
+        <TabControl>
+            <TabItem Header="Имоти" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus">
+                        <i:InvokeCommandAction Command="{Binding TestCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <Grid ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel>
+                        <StackPanel Margin="10,0,0,0" Orientation="Vertical">
+                            <DockPanel HorizontalAlignment="Stretch">
+                                <Label FontWeight="Bold" FontSize="26" Content="Манипулации на имот в системата"/>
+                            </DockPanel>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14">Тип на имота:</Label>
+                                <ComboBox x:Name="propTypeCB" Grid.Column="1" ItemsSource="{Binding PROPERTYTYPES.PropertyTypesList}" SelectedValuePath="ID" SelectedValue="{Binding PROPERTYTYPEID}" DisplayMemberPath="TYPE" IsSynchronizedWithCurrentItem="True"/>
+                                <TextBox Grid.Column="3" Text="{Binding PROPERTYID, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button FontWeight="Black"  Margin="0,0,5,0" Command="{Binding SearchCommand}" Grid.Column="2" HorizontalAlignment="Right" Content="Търсене"/>
+                            </Grid>
+                        </StackPanel>
+                        <Grid Height="210">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="10,0,0,0"  Grid.Column="0">
+                                <Label FontSize="16" FontWeight="Bold" Content="Стойност"/>
+                                <Label FontWeight="Bold" Margin="0,5,0,0" Content="Площ:"/>
+                                <WrapPanel>
+                                    <TextBox x:Name="SizeTextBox" Width="130"
+                                             Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                             Style="{StaticResource textBoxInError}">
+                                        <TextBox.Text>
+                                            <Binding Path="SIZE" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <validations:RegExRule Pattern="^[1-9]+\.?[0-9]*$" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                    <Label x:Name="SizeLabel" HorizontalAlignment="Right" Content="кв.м" FontWeight="Bold"/>
+                                </WrapPanel>
+                                <Label FontWeight="Bold" Content="Цена по наем:"/>
+                                <WrapPanel>
+                                    <TextBox x:Name="RentTextBox" Width="130"
+                                             Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                             Style="{StaticResource textBoxInError}">
+                                        <TextBox.Text>
+                                            <Binding Path="RENT" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <validations:RegExRule Pattern="^[1-9]+\.?[0-9]*$" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                    <Label x:Name="RentLabel" HorizontalAlignment="Right" Content="лв." FontWeight="Bold"/>
+                                </WrapPanel>
+                                <Label FontWeight="Bold" Content="Цена за продажба:"/>
+                                <WrapPanel>
+                                    <TextBox x:Name="SellTextBox" Width="130"
+                                             Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                             Style="{StaticResource textBoxInError}">
+                                        <TextBox.Text>
+                                            <Binding Path="SELL" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <validations:RegExRule Pattern="^[1-9]+\.?[0-9]*$" />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                    <Label x:Name="SellLabel" HorizontalAlignment="Right" Content="лв." FontWeight="Bold"/>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="9,0">
+                                <Label FontSize="16" FontWeight="Bold" Content="Местоположение"/>
+                                <Label x:Name="CityLabel" FontWeight="Bold" Margin="0,5,0,0" Content="Град"/>
+                                <ComboBox x:Name="CityCB" ItemsSource="{Binding CITIES.CitiesList}" SelectedItem="{Binding CITIES.SelectedCity , Mode=TwoWay ,NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True}" DisplayMemberPath="CITYNAME" />
+                                <Label x:Name="RegionLabel" FontWeight="Bold" Margin="0" Content="Квартал"/>
+                                <ComboBox x:Name="RegionCB" ItemsSource="{Binding CITIES.SelectedCity.REGIONS}" SelectedValuePath="REGIONID" SelectedValue="{Binding REGIONID}"  DisplayMemberPath="REGIONNAME"/>
+                                <Label x:Name="AddressLabel" FontWeight="Bold" Margin="0" Content="Улица"/>
+                                <TextBox x:Name="AddressTB"
+                                             Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                             Style="{StaticResource textBoxInError}">
+                                    <TextBox.Text>
+                                        <Binding Path="ADDRESS" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <validations:RegExRule Pattern="^[\p{L}\p{M}]+ [\p{L}\p{M} ]*[0-9]+$" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                            </StackPanel>
+
+                            <ContentControl Content="{Binding DataContext, ElementName=oWNERSDataGrid}" Grid.Column="2">
+                                <ContentControl.ContentTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Grid.Column="2" Margin="10,0">
+                                            <Label FontSize="16" FontWeight="Bold" Content="Собственик"/>
+                                            <Label FontWeight="Bold" Margin="0,5,0,0" Content="Телефонен номер:" />
+                                            <ComboBox IsSynchronizedWithCurrentItem="False" x:Name="OwnerPhoneCB" FontWeight="Bold" IsEditable="True" ItemsSource="{Binding OwnersList}" SelectedItem="{Binding SelectedOwner}" DisplayMemberPath="PHONE" SelectedValuePath="OWNERID" SelectedValue="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType=Grid,AncestorLevel=2}, Path=DataContext.OWNERID}"/>
+                                            <Label FontWeight="Bold" Content="Име"/>
+                                            <Border BorderThickness="2" Visibility="Visible" BorderBrush="Black">
+                                                <TextBlock x:Name="OwnerFNameCB" FontWeight="Bold"  FontSize="14" Text="{Binding SelectedOwner.FNAME}"/>
+                                            </Border>
+                                            <Label FontWeight="Bold" Content="Фамилия"/>
+                                            <Border BorderThickness="2" Visibility="Visible" BorderBrush="Black">
+                                                <TextBlock x:Name="OwnerLNameCB" FontWeight="Bold"  FontSize="14" Text="{Binding SelectedOwner.LNAME}"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ContentControl.ContentTemplate>
+                            </ContentControl>
+
+                            <Grid Grid.Column="3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" MinWidth="82"></ColumnDefinition>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <ListBox Name="imageLB" ItemsSource="{Binding IMAGES.Images}" SelectedItem="{Binding IMAGES.SelectedImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DockPanel.Dock="Top" FlowDirection="LeftToRight" Margin="4,0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Image Height="40" Width="40" Source="{Binding}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <Image  Grid.RowSpan="2" Grid.Column="1" Source="{Binding ElementName=imageLB, Path=SelectedItem}" ></Image>
+                                <WrapPanel Grid.Row="1">
+                                    <Button x:Name="BrowseImageBtn" Command="{Binding BrowseImageCommand}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,10" Height="23" Width="45">
+                                        Browse
+                                    </Button>
+                                    <Button x:Name="ImageDeleteBtn" Command="{Binding DeleteImageCommand}" IsEnabled="{Binding ElementName=imageLB, Path=SelectedItems.Count}" Margin="0,0,0,10">Delete</Button>
+                                </WrapPanel>
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
+
+
+                    <UniformGrid Grid.Row="1" Rows="1">
+                        <ListBox x:Name="categoriesLB" Margin="10" ItemsSource="{Binding CATEGORIES.CategoriesList}" SelectedItem="{Binding CATEGORIES.SelectedCategory}"  DisplayMemberPath="PARAM" SelectedValuePath="CATEGORYID">
+                        </ListBox>
+                        <ListBox Margin="10" ItemsSource="{Binding CATEGORIES.SelectedCategory.CategoryTypesListViewModel}" SelectedValuePath="CATEGORYTYPEID" IsSynchronizedWithCurrentItem="True">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding PARAMVALUE}" IsChecked="{Binding IsChecked}"></CheckBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </UniformGrid>
+
+
+                    <DockPanel Grid.Row="2">
+                        <Label DockPanel.Dock="Top" FontWeight="Bold" FontSize="26" Content="Описание" />
+                        <StackPanel DockPanel.Dock="Right" VerticalAlignment="Bottom">
+                            <CheckBox Content="Активнен" FontSize="14" FontWeight="Bold" IsChecked="{Binding IsActive}" Margin="10,0,10,10"/>
+                            <Button x:Name="SaveAllToDBBtn" Command="{Binding SaveCommand}" FontWeight="Black" 
+                                    FontSize="14" Content="Запази" DockPanel.Dock="Right" VerticalAlignment="Bottom" Margin="10,0,10,10" >
+                                <Button.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource Converter}" Mode="TwoWay">
+                                        <Binding ElementName="propTypeCB" Path="SelectedItems.Count"/>
+                                        <Binding ElementName="SizeTextBox" Path="(Validation.HasError)"/>
+                                        <Binding ElementName="RentTextBox" Path="(Validation.HasError)"/>
+                                        <Binding ElementName="SellTextBox" Path="(Validation.HasError)"/>
+                                        <Binding ElementName="CityCB" Path="SelectedItems.Count"/>
+                                        <Binding ElementName="RegionCB" Path="SelectedItems.Count"/>
+                                        <Binding ElementName="AddressTB" Path="(Validation.HasError)"/>
+                                        <Binding ElementName="OwnerPhoneCB" Path="SelectedItems.Count"/>
+                                    </MultiBinding>
+                                </Button.IsEnabled>
+                            </Button>
+                        </StackPanel>
+                        <TextBox x:Name="DescriptionTB" Text="{Binding DESCRIPTION}"  Margin="0,0,10,10" TextWrapping="Wrap" DockPanel.Dock="Bottom"/>
+                        
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <!--<TabItem Header="Редактиране">
+                <Grid ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel >
+                        <WrapPanel Margin="10,0,0,0" Orientation="Vertical">
+                            <Label FontWeight="Bold" FontSize="26" Content="Редактиране на имот от системата"/>
+                            <Grid DataContext="{StaticResource PropertyTypesViewModel}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Номер на елемента" FontWeight="Bold" FontSize="14" Margin="0,10,0,10"/>
+                                <TextBox DataContext="{StaticResource PropertyViewModel}" Text="{Binding PROPERTYID}" Grid.Column="1" Margin="0,10,0,10"/>
+                                <Button Content="Търсене" Grid.Column="2" Margin="10,10,10,10" />
+                                <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" FontWeight="Bold" FontSize="14">Тип на имота:</Label>
+                                <ComboBox x:Name="propTypeCB_edit" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding PropertyTypesList}" DisplayMemberPath="TYPE" IsSynchronizedWithCurrentItem="True"/>
+                            </Grid>
+                        </WrapPanel>
+                        <Grid Height="210">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="10,0,0,0"  Grid.Column="0">
+                                <Label FontSize="16" FontWeight="Bold" Content="Стойност"/>
+                                <Label FontWeight="Bold" Margin="0,5,0,0" Content="Площ:"/>
+                                <WrapPanel>
+                                    <TextBox x:Name="SizeTextBox_edit" Width="130"/>
+                                    <Label x:Name="SizeLabel_edit" HorizontalAlignment="Right" Content="кв.м" FontWeight="Bold"/>
+                                </WrapPanel>
+                                <Label FontWeight="Bold" Content="Цена по наем:"/>
+                                <WrapPanel>
+                                    <TextBox x:Name="RentTextBox_edit" Width="130"/>
+                                    <Label x:Name="RentLabel_edit" HorizontalAlignment="Right" Content="лв." FontWeight="Bold"/>
+                                </WrapPanel>
+                                <Label FontWeight="Bold" Content="Цена за продажба:"/>
+                                <WrapPanel>
+                                    <TextBox x:Name="SellTextBox_edit" Width="130"/>
+                                    <Label x:Name="SellLabel_edit" HorizontalAlignment="Right" Content="лв." FontWeight="Bold"/>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <StackPanel DataContext="{StaticResource CitiesViewModel}" Grid.Column="1" Margin="9,0">
+                                <Label FontSize="16" FontWeight="Bold" Content="Местоположение"/>
+                                <Label x:Name="CityLabel_edit" FontWeight="Bold" Margin="0,5,0,0" Content="Град"/>
+                                <ComboBox x:Name="CityCB_edit" ItemsSource="{Binding CitiesList}" DisplayMemberPath="CITYNAME" IsSynchronizedWithCurrentItem="True"/>
+                                <Label x:Name="RegionLabel_edit" FontWeight="Bold" Margin="0" Content="Квартал"/>
+                                <ComboBox x:Name="RegionCB_edit" ItemsSource="{Binding SelectedItem.REGIONS, ElementName=CityCB_edit}" DisplayMemberPath="REGIONNAME" IsSynchronizedWithCurrentItem="True"/>
+                                <Label x:Name="AddressLabel_edit" FontWeight="Bold" Margin="0" Content="Улица"/>
+                                <TextBox x:Name="AddressTB_edit" />
+                            </StackPanel>
+
+                            <StackPanel DataContext="{StaticResource OwnersViewModel}" Grid.Column="2" Margin="10,0">
+                                <Label FontSize="16" FontWeight="Bold" Content="Собственик"/>
+                                <Label FontWeight="Bold" Margin="0,5,0,0" Content="Телефонен номер:" />
+                                <ComboBox x:Name="OwnerPhoneCB_edit" FontWeight="Bold" IsEditable="True" ItemsSource="{Binding OwnersList}" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="PHONE" SelectedValuePath="OWNERID"/>
+                                <Label FontWeight="Bold" Content="Име"/>
+                                <ComboBox x:Name="OwnerFNameCB_edit" FontWeight="Bold" ItemsSource="{Binding OwnersList}" DisplayMemberPath="FNAME" IsSynchronizedWithCurrentItem="True"/>
+                                <Label FontWeight="Bold" Content="Фамилия"/>
+                                <ComboBox x:Name="OwnerLNameCB_edit" FontWeight="Bold" ItemsSource="{Binding OwnersList}" DisplayMemberPath="LNAME" IsSynchronizedWithCurrentItem="True"/>
+                            </StackPanel>
+
+                            <Grid Grid.Column="3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" MinWidth="82"></ColumnDefinition>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <ListBox ItemsSource="{Binding IMAGES}" x:Name="ImageLB_edit" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" DockPanel.Dock="Top" FlowDirection="LeftToRight" Margin="4,0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Image Height="40" Width="40" Source="{Binding IMAGE}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <Image  Grid.RowSpan="2" Grid.Column="1" Source="{Binding ElementName=ImageLB_edit, Path=SelectedItem}" ></Image>
+                                <WrapPanel Grid.Row="1">
+                                    <Button x:Name="BrowseImageBtn_edit" Command="{Binding BrowseImageCommand}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,0,10" Height="23" Width="45">
+                                        Browse
+                                    </Button>
+                                    <Button x:Name="ImageDeleteBtn_edit" Command="{Binding DeleteCommand}" Margin="0,0,0,10">Delete</Button>
+                                </WrapPanel>
+                            </Grid>
+
+                        </Grid>
+                    </StackPanel>
+
+
+                    <UniformGrid DataContext="{StaticResource CategoriesListViewModel}" Grid.Row="1" Rows="1">
+                        <ListBox x:Name="categoriesLB_edit" Margin="10" ItemsSource="{Binding CategoriesList}"  DisplayMemberPath="PARAM" SelectedValuePath="CATEGORYID">
+                        </ListBox>
+                        <ListBox Margin="10" ItemsSource="{Binding SelectedItem.CATEGORYTYPES,ElementName=categoriesLB_edit}" SelectedValuePath="CATEGORYTYPEID">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding PARAMVALUE}" IsChecked="{Binding isChecked}"></CheckBox>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </UniformGrid>
+
+
+                    <DockPanel Grid.Row="2">
+                        <Label DockPanel.Dock="Top" FontWeight="Bold" FontSize="26" Content="Описание" />
+                        <Button x:Name="UpdateToDBBtn" Content="Save changes" DockPanel.Dock="Right" VerticalAlignment="Bottom" Margin="10,0,10,10" />
+                        <TextBox x:Name="DescriptionTB_edit" Margin="0,0,10,10" TextWrapping="Wrap" DockPanel.Dock="Bottom"/>
+                    </DockPanel>
+                </Grid>
+            </TabItem>-->
+            <TabItem Header="Манипулации">
+                <Grid DataContext="{StaticResource OwnersViewModel}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <Label FontSize="26" FontWeight="Bold" Content="Собственик"/>
+                            
+                            <Label FontSize="16" Content="Номер" FontWeight="Bold"/>
+                            <TextBox 
+                                Validation.ErrorTemplate="{StaticResource validationTemplate}" 
+                                Style="{StaticResource textBoxInError}"
+                                x:Name="AddOwnerPhoneTB">
+                                <TextBox.Text>
+                                    <Binding Path="SelectedOwner.PHONE"
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validations:RegExRule Pattern="^\d{9,12}$"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            
+                            <Label FontSize="16" Content="Име" FontWeight="Bold"/>
+                            <TextBox
+                                     x:Name="AddOwnerFNameTB"
+                                     Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                     Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="SelectedOwner.FNAME" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validations:RegExRule Pattern="^[\p{L}\p{M}]{2,}$"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                
+                            </TextBox>
+
+
+                            <Label FontSize="16" Content="Фамилия" FontWeight="Bold"/>
+                            <TextBox
+                                     x:Name="AddOwnerLNameTB"
+                                     Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                     Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="SelectedOwner.LNAME" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validations:RegExRule Pattern="^[\p{L}\p{M}]{2,}$"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+
+                            <WrapPanel HorizontalAlignment="Right">
+                                <Button Command="{Binding NewOwner}" x:Name="NewOwnerBtn"  Width="50" Margin="0,0,3,0">Нов</Button>
+                                <Button Command="{Binding SaveOwner}" x:Name="AddOwnerBtn" Margin="0,0,3,0" Content="Запази">
+                                    <Button.IsEnabled>
+                                        <MultiBinding Converter="{StaticResource Converter}" Mode="TwoWay">
+                                            <Binding ElementName="AddOwnerPhoneTB" Path="(Validation.HasError)" />
+                                            <Binding ElementName="AddOwnerFNameTB" Path="(Validation.HasError)" />
+                                            <Binding ElementName="AddOwnerLNameTB" Path="(Validation.HasError)" />
+                                        </MultiBinding>
+                                    </Button.IsEnabled>
+                                </Button>
+                                <Button Command="{Binding DeleteOwner}" x:Name="DeleteOwnerBtn" Margin="0,0,3,0">Изтрии</Button>
+                            </WrapPanel>
+                        </StackPanel>
+                        <DataGrid x:Name="oWNERSDataGrid" Margin="10,60,10,0" SelectedValuePath="OWNERID" IsReadOnly="True" ItemsSource="{Binding OwnersList}" SelectedItem="{Binding SelectedOwner}" AutoGenerateColumns="False" Grid.Column="1" BorderBrush="White">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn x:Name="fNAMEColumn" Binding="{Binding FNAME}" Header="Име" Width="SizeToHeader"/>
+                                <DataGridTextColumn x:Name="lNAMEColumn" Binding="{Binding LNAME}" Header="Фамилия" Width="SizeToHeader"/>
+                                <DataGridTextColumn x:Name="oWNERIDColumn" Binding="{Binding OWNERID}" Header="ID" Width="SizeToHeader"/>
+                                <DataGridTextColumn x:Name="pHONEColumn" Binding="{Binding PHONE}" Header="Телефон" Width="1*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                    <Grid DataContext="{StaticResource PropertyViewModel}" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="10,0,10,0">
+                            <Label FontSize="26" Content="Вид на Имота" FontWeight="Bold"/>
+                            
+                            <Label FontSize="16" Content="Вид" FontWeight="Bold"/>
+                            <TextBox
+                                     x:Name="AddPropTypeTB"
+                                     Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                     Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="PROPERTYTYPES.AddedPropertyType.TYPE" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validations:RegExRule Pattern="^[\p{L}\p{M}]{1}[\p{L}\p{M} \-]+$"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+                            
+                            <WrapPanel HorizontalAlignment="Right">
+                                <Button Command="{Binding PROPERTYTYPES.AddedPropertyType.SavePropTypeCommand}" CommandParameter="{Binding PROPERTYTYPES}" x:Name="AddPropTypeBtn" Margin="0,0,5,0" Content="Запази">
+                                    <Button.IsEnabled>
+                                        <MultiBinding Converter="{StaticResource Converter}" Mode="TwoWay">
+                                            <Binding ElementName="AddPropTypeTB" Path="(Validation.HasError)" />
+                                        </MultiBinding>
+                                    </Button.IsEnabled>
+                                </Button>
+                                <Button Command="{Binding PROPERTYTYPES.DeletePropType}" x:Name="DeletePropTypeBtn" Margin="0,0,5,0">Изтрии</Button>
+                            </WrapPanel>
+                        </StackPanel>
+                        <DataGrid x:Name="propertyTypeDataGrid" ItemsSource="{Binding PROPERTYTYPES.PropertyTypesList}" Grid.Column="1" Height="120" SelectedItem="{Binding PROPERTYTYPES.SelectedPropertyType, Mode=OneWayToSource}" Margin="10,10,10,0" IsReadOnly="True" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected" BorderBrush="White">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn x:Name="propertyTypeIDColumn" Binding="{Binding ID}" Header="ID" Width="*"/>
+                                <DataGridTextColumn x:Name="propertyTypeTYPEColumn" Binding="{Binding TYPE}" Header="Вид" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <Grid DataContext="{StaticResource PropertyViewModel}" Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <StackPanel>
+                                <Label FontSize="26" Content="Град" FontWeight="Bold"/>
+                                <Label FontSize="16" Content="Име на град" FontWeight="Bold"/>
+                                <TextBox 
+                                    x:Name="AddCityTB" 
+                                    Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                    Style="{StaticResource textBoxInError}">
+                                    <TextBox.Text>
+                                        <Binding Path="CITIES.AddCity.CITYNAME" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <validations:RegExRule Pattern="^[\p{L}\p{M}]{1}[\p{L}\p{M} ]+$"/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <WrapPanel HorizontalAlignment="Right">
+                                    <Button x:Name="AddCityBtn" Command="{Binding CITIES.AddCity.SaveCityCommand}" CommandParameter="{Binding CITIES}" Margin="0,0,5,0" Content="Добави">
+                                        <Button.IsEnabled >
+                                            <MultiBinding Converter="{StaticResource Converter}" Mode="TwoWay">
+                                                <Binding ElementName="AddCityTB" Path="(Validation.HasError)" />
+                                            </MultiBinding>
+                                        </Button.IsEnabled>
+                                    </Button>
+                                    <Button x:Name="DeleteCityBtn" Command="{Binding CITIES.DeleteCityCommand}" Margin="0,0,5,0">Изтрии</Button>
+                                </WrapPanel>
+                            </StackPanel>
+                            <StackPanel>
+                                <Label FontSize="26" Content="Регион" FontWeight="Bold"/>
+                                
+                                <Label FontSize="16" Content="Име на регион" FontWeight="Bold"/>
+                                <TextBox  
+                                    x:Name="AddRegionTB"
+                                    Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                    Style="{StaticResource textBoxInError}">
+                                    <TextBox.Text>
+                                        <Binding Path="CITIES.SelectedCity.AddRegion.REGIONNAME" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <validations:RegExRule Pattern="^[\p{L}\p{M}]{1}[\p{L}\p{M} \-]+$"/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+
+                                <WrapPanel HorizontalAlignment="Right">
+                                    <Button Command="{Binding CITIES.SelectedCity.AddRegion.SaveRegionCommand}" CommandParameter="{Binding CITIES.SelectedCity}" 
+                                            x:Name="AddRegionBtn" Margin="0,0,5,0" Content="Добави" Style="{StaticResource DisablerButton}">
+                                        <Button.IsEnabled>
+                                            <MultiBinding Converter="{StaticResource Converter}" Mode="TwoWay">
+                                                <Binding ElementName="AddRegionTB" Path="(Validation.HasError)"/>
+                                                <Binding ElementName="citiesDataGrid" Path="SelectedItems.Count"/>
+
+                                            </MultiBinding>
+                                        </Button.IsEnabled>
+                                    </Button>
+                                    <Button Command="{Binding CITIES.SelectedCity.DeleteRegion}"  x:Name="DeleteRegionBtn" Margin="0,0,5,0" 
+                                            Content="Изтрии" IsEnabled="{Binding ElementName=regionsDataGrid, Path=SelectedItems.Count}"></Button>
+                                </WrapPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <WrapPanel Orientation="Horizontal" Grid.Column="1">
+                            <DataGrid x:Name="citiesDataGrid" Height="120" Margin="10,10,10,0" IsReadOnly="True"  ItemsSource="{Binding CITIES.CitiesList}" SelectedItem="{Binding CITIES.SelectedCity}" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected" BorderBrush="White">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn x:Name="cityNAMEColumn" Binding="{Binding CITYNAME}" Header="Град" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid Height="120"  Margin="10,5,10,0" IsReadOnly="True" ItemsSource="{Binding CITIES.SelectedCity.REGIONS}" SelectedItem="{Binding CITIES.SelectedCity.SelectedRegion}" SelectedValuePath="REGIONID" SelectedValue="{Binding CITIES.SelectedCity.SelectedRegionId}" x:Name="regionsDataGrid" AutoGenerateColumns="False"  RowDetailsVisibilityMode="VisibleWhenSelected" BorderBrush="White">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn x:Name="regionIDColumn" Binding="{Binding REGIONID}" Header="ID" Width="*"/>
+                                    <DataGridTextColumn x:Name="regionNAMEColumn" Binding="{Binding REGIONNAME}" Header="Регион" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </WrapPanel>
+                    </Grid>
+
+                    <Grid Grid.Column="1" Grid.Row="1" DataContext="{StaticResource PropertyViewModel}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel >
+                            <Label FontSize="26" Content="Категории" FontWeight="Bold"/>
+                            
+                            <Label FontSize="16" Content="Категория" FontWeight="Bold"/>
+                            <TextBox 
+                                x:Name="AddCategoryTB"
+                                Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="CATEGORIES.AddCategory.PARAM" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validations:RegExRule Pattern="^[\p{L}\p{M}]{1}[\p{L}\p{M} \-]+$"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+
+                            <WrapPanel HorizontalAlignment="Right">
+                                <Button x:Name="AddCategoryBtn" Command="{Binding CATEGORIES.AddCategory.SaveCategoryCommand}" CommandParameter="{Binding CATEGORIES}" Margin="0,0,5,0" Content="Добави">
+                                    <Button.IsEnabled>
+                                        <MultiBinding Converter="{StaticResource Converter}" Mode="TwoWay">
+                                            <Binding ElementName="AddCategoryTB" Path="(Validation.HasError)"/>
+                                        </MultiBinding>
+                                    </Button.IsEnabled>
+                                </Button>
+                                <Button x:Name="DeleteCategoryBtn" Command="{Binding CATEGORIES.DeleteCommand}" Margin="0,0,5,0">Изтрии</Button>
+                            </WrapPanel>
+                            <Label FontSize="26" Content="Подкатегория" FontWeight="Bold"/>
+                            
+                            <Label FontSize="16" Content="Елемент" FontWeight="Bold"/>
+                            <TextBox 
+                                x:Name="AddCategoryMem"
+                                Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="CATEGORIES.SelectedCategory.AddCategoryValue.PARAMVALUE" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <validations:RegExRule Pattern="^[\p{L}\p{M}]{1}[\p{L}\p{M} \-]+$"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <WrapPanel HorizontalAlignment="Right">
+                                <Button Command="{Binding CATEGORIES.SelectedCategory.AddCategoryValue.AddCategoryValueCommand}" CommandParameter="{Binding CATEGORIES.SelectedCategory}" x:Name="AddCategoryMemBtn" Margin="0,0,5,0" Content="Добави">
+                                    <Button.IsEnabled>
+                                        <MultiBinding Converter="{StaticResource Converter}" Mode="TwoWay">
+                                            <Binding ElementName="AddCategoryMem" Path="(Validation.HasError)"></Binding>
+                                            <Binding ElementName="categoryDataGrid" Path="SelectedItems.Count"/>
+                                        </MultiBinding>
+                                    </Button.IsEnabled>
+                                </Button>
+                                <Button Command="{Binding CATEGORIES.SelectedCategory.DeleteCategoryValueCommand}" x:Name="DeleteCategoryMemBtn" 
+                                        Margin="0,0,5,0" Content="Изтрии" IsEnabled="{Binding ElementName=categoryTypeDataGrid, Path=SelectedItems.Count}"
+                                        >
+                                </Button>
+                            </WrapPanel>
+                        </StackPanel>
+                        <WrapPanel Orientation="Horizontal" Grid.Column="1">
+                            <DataGrid Height="120" ItemsSource="{Binding CATEGORIES.CategoriesList}" SelectedItem="{Binding CATEGORIES.SelectedCategory}" SelectedValuePath="PARAMTYPE" Margin="10,10,10,0" IsReadOnly="True" x:Name="categoryDataGrid" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected" BorderBrush="White">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn x:Name="categoryNAMEColumn" Binding="{Binding PARAM}" Header="Категория" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid Height="120" ItemsSource="{Binding CATEGORIES.SelectedCategory.CategoryTypesListViewModel}" SelectedItem="{Binding CATEGORIES.SelectedCategory.DeleteCategoryValue}"  Margin="10,5,10,0" IsReadOnly="True" x:Name="categoryTypeDataGrid" AutoGenerateColumns="False" RowDetailsVisibilityMode="VisibleWhenSelected" BorderBrush="White">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn x:Name="categoryTypeIdColumn" Binding="{Binding CATEGORYTYPEID}" Header="ID" Width="*"/>
+                                    <DataGridTextColumn x:Name="categoryTypeNAMEColumn" Binding="{Binding PARAMVALUE}" Header="Подкатегория" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </WrapPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

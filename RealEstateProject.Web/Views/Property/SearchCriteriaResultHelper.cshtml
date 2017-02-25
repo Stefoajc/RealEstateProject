@@ -1,0 +1,40 @@
+﻿@model PagedList.IPagedList<RealEstateProject.Model.PROPERTIES>
+
+@using PagedList.Mvc;
+
+<div id="content">
+    <table class="PropTableStyles">
+        <tbody class="propertiesList">
+            @foreach (var item in Model)
+            {
+                @Html.Partial("PartialIndexHelper", item);
+            }
+        </tbody>
+    </table>
+
+
+
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    <div id="contentPagerPost">
+        @Html.PagedListPager(Model, page => Url.Action("SearchCriteriaResult",
+        new
+        {
+            page = page,
+            sortOrder = ViewBag.CurrentSort,
+            pageSize = ViewBag.CurrentPageSize,
+            type = ViewBag.CurrentType,
+            propType = ViewBag.propType,
+            Features = ViewBag.Features,
+            RentFrom = ViewBag.RentFrom,
+            RentTo = ViewBag.RentTo,
+            SellFrom = ViewBag.SellFrom,
+            SellTo = ViewBag.SellTo,
+            SizeFrom = ViewBag.SizeFrom,
+            SizeTo = ViewBag.SizeTo,
+            City = ViewBag.City,
+            Region = ViewBag.Region
+        }))
+    </div>
+</div>

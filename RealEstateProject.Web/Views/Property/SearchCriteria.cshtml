@@ -1,0 +1,144 @@
+﻿
+
+@{
+    ViewBag.Title = "SearchCriteria";
+}
+
+<h2 style="text-align:center">Разширено търсене</h2>
+<div id="toggle">
+    <section style="background-color:white; font-weight:bold">
+        <table class="table-condensed">
+            <tbody>
+                <tr>
+                    <td>
+                        Цена под наем от:
+                    </td>
+                    <td>
+                        <input class="RentFrom" type="text" />
+                    </td>
+                    <td>
+                        лв.
+                    </td>
+                    <td>
+                        до:
+                        <input class="RentTo" type="text" />
+                    </td>
+                    <td>
+                        лв.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Цена за продан от:
+                    </td>
+                    <td>
+                        <input class="SellFrom" type="text" />
+                    </td>
+                    <td>
+                        лв.
+                    </td>
+                    <td>
+                        до:
+                        <input class="SellTo" type="text" />
+                    </td>
+                    <td>
+                        лв.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Квадратура от:
+                    </td>
+                    <td>
+                        <input class="SizeFrom" type="text" />
+                    </td>
+                    <td>
+                        лв.
+                    </td>
+                    <td>
+                        до:
+                        <input class="SizeTo" type="text" />
+                    </td>
+                    <td>
+                        лв.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Град
+                    </td>
+                    <td>
+                        <select class="cities">
+                            <option selected value=""> -- Всички -- </option>
+                            @foreach (var item in ViewBag.Cities)
+                            {
+                                <option value="@item.CITYID">@item.CITYNAME</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        Регион:
+                    </td>
+                    <td>
+                        <select class="regions">
+                            <option selected value=""> -- Всички -- </option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <table class="propertytypes table">
+            <tbody>
+                <tr>
+                    <td>
+                        Вид:
+                    </td>
+                </tr>
+                <tr>
+                    @foreach (var item in ViewBag.PropTypes)
+            {
+                        <td>
+                            <input type="checkbox" class="PropType" value="@item.ID" />
+                            <text>@item.TYPE</text>
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+        <table class="categories-categorytypes table">
+            <tbody>
+                @foreach (var items in ViewBag.Features)
+            {
+                    <tr>
+                        <td> @items.PARAMTYPE</td>
+                    </tr>
+                    <tr>
+                        @foreach (var item in items.CATEGORYTYPES)
+                        {
+                            <td>
+                                <input type="checkbox" class="feats" value="@item.CATEGORYTYPEID" />
+                                <text>@item.PARAMVALUE</text>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="searchButtContainer">
+            <a class="btn searchBtn" style="margin-left:1040px">SEARCH</a>
+        </div>
+        <div>
+            <br />
+        </div>
+
+        <div class="testdiv">
+
+        </div>
+    </section>
+</div>
+<button class="toggleBtn" style="background-color:cadetblue; display:block; width:100%; height:35px; border-bottom-left-radius: 14px; border-bottom-right-radius:14px;"> Покажи/Скрий</button>
+<div class="searchResult">
+
+</div>

@@ -1,0 +1,62 @@
+﻿@*@model IEnumerable<RealEstateProject.Model.PROPERTIES>*@
+
+@model PagedList.IPagedList<RealEstateProject.Model.PROPERTIES>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Имоти";
+}
+
+<section class="fullPropertiesListInfo">
+
+
+
+
+
+    <section class="topPart">
+        <h2 style="text-align : center">Всички имоти предлагани от /Име на Агенцията/ </h2>
+
+        <section class="upperPart upperPartSearch Search">
+            <text>Намери по номер:</text>
+            <input type="text" name="searchString" id="searchString" value="" />
+            <button id="searchButton">Търси</button>
+        </section>
+
+        <section class="upperPart optionsBar">
+            <text id="upperPart-sort" class="upperPart-items">Сортирай:</text>
+            <select class="orderSelection save">
+                <option value="rent_asc"> Цена Наем (възходящ) </option>
+                <option value="rent_desc"> Цена Наем (низходящ) </option>
+                <option value="sell_asc"> Цена Продажна (възходящ) </option>
+                <option value="sell_desc"> Цена Продажна (низходящ) </option>
+                <option value="size_asc"> Размер (възходящ)</option>
+                <option value="size_desc"> Размер (низходящ)</option>
+            </select>
+            <text id="upperPart-perPage" class="upperPart-items">Имоти на страница:</text>
+            <select class="pageCountSelection save">
+                <option value="3"> 3 </option>
+                <option value="5"> 5 </option>
+                <option value="10"> 10 </option>
+            </select>
+            @Html.ActionLink("Разширено търсене", "SearchCriteria")
+        </section>
+    </section>
+
+
+    <section id="propertiesContainer" class="propertiesConnectedSection">
+
+                 @Html.Action("PartialIndex", new {
+                sortOrder = ViewBag.SortOrder,
+                searchString = ViewBag.SearchString,
+                page = ViewBag.Page,
+                pageSize = ViewBag.PageSize
+                 })
+
+        @*<br />
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        Html.PagedListPager(Model, page => Url.Action("PartialIndex",
+        new { page, sortOrder = ViewBag.CurrentSort, pageSize = ViewBag.CurrentPageSize, type = ViewBag.CurrentType}))*@
+    </section>
+</section>

@@ -1,0 +1,18 @@
+﻿<Application x:Class="RealEstateProject.View.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:RealEstateProject.View"
+             xmlns:vm="clr-namespace:RealEstateProject.ViewModel;assembly=RealEstateProject.ViewModel"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <vm:OwnersViewModel x:Key="OwnersViewModel"/>
+        <vm:CitiesViewModel x:Key="CitiesViewModel"/>
+        <vm:PropertyTypesViewModel x:Key="PropertyTypesViewModel"/>
+        <vm:PropertyViewModel x:Key="PropertyViewModel"/>
+        <vm:RegionViewModel x:Key="RegionViewModel"/>
+        <vm:CityViewModel x:Key="CityViewModel"/> 
+        <vm:CategoriesListViewModel x:Key="CategoriesListViewModel"/>
+        <vm:OwnerViewModel x:Key="OwnerViewModel"/>
+        <vm:PropertyTypeViewModel x:Key="PropertyTypeViewModel"/>
+    </Application.Resources>
+</Application>

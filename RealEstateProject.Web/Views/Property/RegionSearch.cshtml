@@ -1,0 +1,5 @@
+﻿<option selected value=""> -- Всички -- </option>
+@foreach (var item in ViewBag.Regions)
+{
+    <option value="@item.REGIONID">@item.REGIONNAME</option>
+}

@@ -1,0 +1,79 @@
+﻿@model PagedList.IPagedList<RealEstateProject.Model.PROPERTIES>
+
+@{
+    ViewBag.Title = "SearchCriteriaResult";
+}
+
+@{string strOrder = "http://localhost:29535/Property/SearchCriteriaResult?"
+                                                                  + "RentFrom=" + ViewBag.RentFrom
+                                                                  + "&RentTo=" + ViewBag.RentTo 
+                                                                  + "&SellFrom=" + ViewBag.SellFrom 
+                                                                  + "&SellTo=" + ViewBag.SellTo 
+                                                                  + "&SizeFrom=" + ViewBag.SizeFrom 
+                                                                  + "&SizeTo=" + ViewBag.SizeTo 
+                                                                  + "&City=" + ViewBag.City 
+                                                                  + "&Region=" + ViewBag.Region 
+                                                                  + "&propType=" + ViewBag.propType
+                                                                  + "&Features=" + ViewBag.Features
+                                                                  + "&page=1"
+                                                                  + "&pageSize=" + ViewBag.CurrentPageSize
+                                                                  + "&sortOrder";
+}
+
+@{string strPageSize = "http://localhost:29535/Property/SearchCriteriaResult?"
+                                                                + "RentFrom=" + ViewBag.RentFrom
+                                                                + "&RentTo=" + ViewBag.RentTo
+                                                                + "&SellFrom=" + ViewBag.SellFrom
+                                                                + "&SellTo=" + ViewBag.SellTo
+                                                                + "&SizeFrom=" + ViewBag.SizeFrom
+                                                                + "&SizeTo=" + ViewBag.SizeTo
+                                                                + "&City=" + ViewBag.City
+                                                                + "&Region=" + ViewBag.Region
+                                                                + "&propType=" + ViewBag.propType
+                                                                + "&Features=" + ViewBag.Features
+                                                                + "&page=1"
+                                                                + "&sortOrder=" + ViewBag.CurrentSort
+                                                                + "&pageSize"
+                                                                ;
+}
+
+<section class="fullPropertiesListInfo">
+
+    <section class="topPart">
+        <h2 style="text-align : center">Резултат от търсенето </h2>
+
+        @*<section class="upperPart upperPartSearch Search">
+            <text>Намери по номер:</text>
+            <input type="text" name="searchString" id="searchString" value="" />
+            <button id="searchButton">Търси</button>
+        </section>*@
+
+        <section class="upperPart optionsBar">
+            <text id="upperPart-sort" class="upperPart-items">Сортирай:</text>
+            <select class="orderSelectionPost save">
+                <option value="@strOrder=rent_asc">Цена Наем (възходящ)</option>
+                <option value="@strOrder=rent_desc">Цена Наем (низходящ)</option>
+                <option value="@strOrder=sell_asc">Цена Продажна (възходящ)</option>
+                <option value="@strOrder=sell_desc">Цена Продажна (низходящ)</option>
+                <option value="@strOrder=size_asc">Размер (възходящ)</option>
+                <option value="@strOrder=size_desc">Размер (низходящ)</option>
+            </select>
+            <text id="upperPart-perPage" class="upperPart-items">Имоти на страница:</text>
+            <select class="pageCountSelectionPost save">
+                <option value="@strPageSize=3"> 3 </option>
+                <option value="@strPageSize=5"> 5 </option>
+                <option value="@strPageSize=10"> 10 </option>
+            </select>
+            <span style="margin-left:50px">
+                @Html.ActionLink("Назад към Всички", "Index")
+            </span>
+        </section>
+    </section>
+
+
+    <section id="propertiesContainer" class="propertiesConnectedSection">
+
+       @Html.Partial("SearchCriteriaResultHelper",Model)
+
+    </section>
+</section>

@@ -1,0 +1,49 @@
+﻿@model  RealEstateProject.Model.PROPERTIES
+
+
+
+<tr class="propertyInfo">
+    <td width="140" valign="top">
+        <a class="atoph_image" href="~/Property/Details/@Html.DisplayFor(modelItem => Model.PROPERTYID)">
+            <span class="atoph_ribbon" style="display:block; position:absolute; color:red; background-color:transparent; font-weight:bold">
+                <span>ТОП оферта</span>
+            </span>
+            <img src="@Html.DisplayFor((modelItem) => Model.IMAGES.FirstOrDefault().IMAGE)" alt="" width="140">
+        </a>
+    </td>
+    <td style="padding-left:10px;" valign="top">
+        <div class="right_col">
+            <a class="atoph_seo" href="~/Property/Details/@Html.DisplayFor(modelItem => Model.PROPERTYID)">
+                @Html.DisplayFor(modelItem => Model.PROPERTYTYPES.TYPE)
+            </a>
+            <br />
+            <span class="atoph_location">
+                <span style="text-decoration:underline">@Html.DisplayFor(modelItem => Model.REGIONS.REGIONNAME) , @Html.DisplayFor(modelItem => Model.REGIONS.CITIES.CITYNAME)</span>
+            </span>
+            <span class="atoph_seo_desc">
+                <br />
+                <span>
+                    <b>Квадратура: <span>@Html.DisplayFor(modelItem => Model.SIZE)</span> кв.м</b>
+                </span>
+                <br />
+                <span class="atoph_rent atoph_money" style="margin-right:10px;">
+                    Цена под наем:
+                    <span>@Html.DisplayFor(modelItem => Model.RENT) лв.</span>
+
+                </span>
+                <span class="atoph_price atoph_money">
+                    Продажна цена:
+                    <span>@Html.DisplayFor(modelItem => Model.SELL) лв.</span>
+                    @*<span style="font-size:10px">(Цена)</span>
+                        <span class="price_per_listing">
+                            <span class="nowrap">Цена за кв.м</span>
+                        </span>*@
+                </span>
+                <br />
+                <span class="atoph_desc">
+                    ОФЕРТА №@Html.DisplayFor(modelItem => Model.PROPERTYID) @Html.DisplayFor(modelItem => Model.DESCRIPTION)
+                </span>
+            </span>
+        </div>
+    </td>
+</tr>

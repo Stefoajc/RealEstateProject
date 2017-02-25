@@ -1,0 +1,143 @@
+﻿@model RealEstateProject.Model.PROPERTIES
+
+
+@{
+    ViewBag.Title = "Детайли";
+}
+
+<h2>Детайли</h2>
+
+<div class="details">
+    <h3 class="pagetop">Имот номер: @Html.DisplayFor(model => model.PROPERTYID)</h3>
+    <hr />
+    <table class="propertyFullDetail">
+        <tbody>
+            <tr>
+                <th class="rightcol"></th>
+                <th class="leftcol"></th>
+            </tr>
+            <tr>
+                <td>
+                    <dl class="dl-horizontal leftcol">
+                        <dt>
+                            Тип:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.PROPERTYTYPES.TYPE)
+                        </dd>
+
+                        <dt>
+                            Регион:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.REGIONS.REGIONNAME)
+                        </dd>
+
+                        <dt>
+                            Размер:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.SIZE) кв.м
+                        </dd>
+
+                        <dt>
+                            Наем:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.RENT) лв.
+                        </dd>
+
+                        <dt>
+                            Продажна цена:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.SELL) лв.
+                        </dd>
+
+                        @{var Params = Model.PARAMS; }
+                        @foreach (var par in Params.Where(p => p.CATEGORY.PARAMTYPE != "Особености"))
+                        {
+
+                            <dt>@par.CATEGORY.PARAMTYPE:</dt>
+
+                            <dd>@par.CATEGORYTYPES.PARAMVALUE</dd>
+
+                        }
+
+                        <dt class="features">
+                            Особености:
+                        </dt>
+                        <dd class="features">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        @{var FParams = Params.Where(p => p.CATEGORY.PARAMTYPE == "Особености");}
+
+                                        @foreach (var par in FParams)
+                                        {
+                                            <td class="featUnit">@par.CATEGORYTYPES.PARAMVALUE</td>
+                                        }
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </dd>
+
+                    </dl>
+                </td>
+
+                <td class="leftcol">
+                    @{var imageHolder = Model.IMAGES.FirstOrDefault() == null ? null : Url.Content("~" + Model.IMAGES.FirstOrDefault().IMAGE); }
+                    <img class="imagemain" src="@imageHolder" alt="No Image" width="280px" />
+                    <table class="imagesList">
+                        <tbody>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                @if (imageHolder != null)
+                                {
+                                    foreach (var image in Model.IMAGES)
+                                    {
+                                        <td>
+                                            <img class="imageoflist" src="@Url.Content("~" + image.IMAGE)" alt="No Image" width="65px" />
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="desccontainer">
+        <h3><b>Описание</b></h3>
+        <p class="description" style="padding-left:5px">
+            <strong>
+                @Html.DisplayFor(model => model.DESCRIPTION)
+            </strong>
+        </p>
+    </div>
+</div>
+<p class="backtoall">
+
+    @Html.ActionLink("Назад към всички", "Index")
+</p>

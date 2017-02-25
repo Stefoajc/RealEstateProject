@@ -1,0 +1,75 @@
+﻿
+
+.propertyBriefDetails {
+}
+
+.fullPropertiesListInfo {
+    background-color: whitesmoke;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.optionsBar, .Search {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 130px;
+}
+
+
+
+.propertyInfo {
+    background-color: aliceblue;
+    display: block;
+    overflow: hidden;
+    table-layout: fixed;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: 1px solid grey;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+.atoph_image {
+}
+
+.ad_block_toph {
+}
+
+.topPart {
+}
+
+.atoph_seo {
+    color: hotpink;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.atoph_seo_desc {
+}
+
+.atoph_money {
+    font-weight: bold;
+}
+
+.atoph_desc {
+    font-family: Verdana;
+    font-style: italic;
+    overflow: hidden;
+}
+
+
+.PropTableStyles {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 130px;
+    table-layout: fixed;
+    width: 900px;
+}
+
